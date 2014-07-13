@@ -1,6 +1,9 @@
 from twython import Twython
 import pprint
 import os, random
+from datetime import date
+import csv
+import time
 
 pp = pprint.PrettyPrinter()
 
@@ -15,30 +18,40 @@ twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 def get_mentions(output):
 	statuses = output['statuses']
+	tweets = []
 	for status in statuses:
 		user = status['user']
-		if not 't.co' in status['text']:
-			#print "\n"
+		if 'wrap' in status['text']: # To filter out tweets that only have 'wrap' because of a URL
 			handle = "@" + user['screen_name']
-			#print "Handle: " + handle
-			date_time = status['created_at']
+			#date_time = status['created_at']
 			tweet = status['text']
-			#print "Tweet: " + tweet
 			retweet = "RT " + handle + ": " + tweet
-			#print retweet
-			#print len(retweet)
-			if len(retweet) <= (140 - 26 - len(leadtext)):
-				print leadtext + retweet
-				print "Created at: " + date_time
-				total_characters = len(retweet) + len(leadtext) + 26 
-				print "Total characters: " + str(total_characters)
-	pp.pprint(output['search_metadata'])
+			if len(retweet) <= (140 - 26 - len(leadtext)): # 140 - URL - "This is..."
+				tweets.append(leadtext + retweet)
+				#print "Created at: " + date_time
+				#total_characters = len(retweet) + len(leadtext) + 26
+				#print total_characters
+	return tweets
 
 def get_image():
-	#image = random.choice(os.listdir('images/'))
-	photo = open('images/1.jpg', 'rb')
-	#twitter.update_status_with_media(status='This is also a wrap.', media=photo)
+	image = random.choice(os.listdir('images/'))
+	photo = open('images/%s' % (image), 'rb')
+	#print photo
+	return photo
 
-output = twitter.search(q='"thats a wrap" OR "that%27s a wrap"', since='2014-06-26', count='100')
-get_mentions(output)
-#get_image()
+def WriteToCSV(output):
+	csvfile = open("archive.csv", "wb")
+	wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+	wr.writerow(output)
+
+today_date = date.today()
+output = twitter.search(q='"thats a wrap" OR "that%27s a wrap"', since=today_date, count='100')
+tweetoutput = get_mentions(output)
+#WriteToCSV(tweetoutput)
+#for i in range(3,8):
+#	photo = get_image()
+#	twitter.update_status_with_media(status=tweetoutput[i], media=photo)
+#	time.sleep(5)
+	#pprint.pprint(tweetoutput[i])
+photo = get_image()
+twitter.update_status_with_media(status=tweetoutput[0], media=photo)
