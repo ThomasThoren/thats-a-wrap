@@ -9,10 +9,10 @@ pp = pprint.PrettyPrinter()
 
 leadtext = "This is also a wrap. " #21 characters, plus ~26 for the photo.
 
-APP_KEY = 'RYKFwea7gAmY96KbHvlQDqk39' # Customer Key here
-APP_SECRET = 'DRfIHvhChz931NdckM6u4HFmXnv6TVCvUfADEFLtp0ZVUZfcVs' # Customer secret here
-OAUTH_TOKEN = '2588047508-M09z6DbV2pMMAjvLpg4RdNrVtbsLUjm3StRQtPO'  # Access Token here
-OAUTH_TOKEN_SECRET = 'kzZuNLSD0bTd4AIgM8aI0ciY2H1hFDwVOfUwoaItxfKoL'  # Access Token Secret here
+APP_KEY = 'CUSTOMER_KEY_GOES_HERE' # Customer Key here
+APP_SECRET = 'CUSTOMER_SECRET_GOES_HERE' # Customer secret here
+OAUTH_TOKEN = 'ACCESS_TOKEN_GOES_HERE'  # Access Token here
+OAUTH_TOKEN_SECRET = 'ACCESS_TOKEN_SECRET_GOES_HERE'  # Access Token Secret here
 
 twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
